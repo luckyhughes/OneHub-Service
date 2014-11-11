@@ -1,0 +1,84 @@
+<div class="page-header">
+	<h2>Signup</h2>
+</div>
+
+<div class="row">
+
+	<div class="col-md-6">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="firstname" class="col-sm-3 control-label">First
+					Name:</label>
+				<div class="col-sm-9">
+					<input id="firstname" ng-model="user.firstName" type="text"
+						class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="lasttname" class="col-sm-3 control-label">Last
+					Name:</label>
+				<div class="col-sm-9">
+					<input id="lastname" ng-model="user.lastName" type="text"
+						class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="company" class="col-sm-3 control-label">Company
+					Name:</label>
+				<div class="col-sm-9">
+					<input id="company" ng-model="user.tenantId" type="text"
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="phone" class="col-sm-3 control-label">Phone:</label>
+				<div class="col-sm-9">
+					<input id="phone" ng-model="user.phone" type="tel"
+						class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-3 control-label">Email :</label>
+				<div class="col-sm-9">
+					<input id="email" ng-model="user.email" type="email"
+						required="required" class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="username" class="col-sm-3 control-label">User
+					Name:</label>
+				<div class="col-sm-9">
+					<input id="username" ng-model="user.username" type="text"
+						class="form-control" />
+				</div>
+			</div>
+			<div class="form-group required">
+				<label for="password" class="col-sm-3 control-label">Password:</label>
+				<div class="col-sm-9">
+					<input id="password" ng-model="user.password" type="password"
+						class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="Retype password" class="col-sm-3 control-label">Retype
+					Password:</label>
+				<div class="col-sm-9">
+					<input id="retypepassword" type="password" class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-offset-3">
+					<input type="submit" value="Signup Now" class="btn btn-primary"
+						ng-click="signup()" />
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>

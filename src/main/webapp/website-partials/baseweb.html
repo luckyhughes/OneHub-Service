@@ -1,0 +1,31 @@
+<div class="navbar-wrapper">
+		<div class="container">
+			<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#navbar"
+							aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" ui-sref="website.home">OneTestHub</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a ui-sref="website.home">Home</a></li>
+							<li><a ui-sref="website.about">About</a></li>
+							<li><a ui-sref="website.contact">Contact</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li><a ui-sref="cloud.login"><font color="FFFAF0">SignIn</font></a></li>
+							<li><a ui-sref="cloud.signup"><font color="FFFAF0">SignUp</font></a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	
+	<div ui-view></div>
