@@ -110,7 +110,7 @@ function EditController($scope, $routeParams, $location, NewsService) {
 	
 	$scope.save = function() {
 		$scope.newsEntry.$save(function() {
-			$location.path('#app/myaccount');
+			$location.path('cloud/myaccount');
 		});
 	};
 };
@@ -133,7 +133,7 @@ function CreateUserController($scope, $location, UserService) {
 	
 	$scope.signup = function() {
 		$scope.user.$save(function() {
-			$location.path('cloud/myaccount');
+			$location.path('cloud/login');
 		});
 	};
 };

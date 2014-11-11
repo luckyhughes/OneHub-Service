@@ -24,12 +24,9 @@
 					<!-- 
 						OneTestHub
 					-->
-					<li>
-						<a class="btn btn-default" ui-sref="cloud.signup" role="button">Signup</a>
-					</li>
-					<li>
-						<a class="btn btn-default" ui-sref="cloud.login" role="button">Login</a>
-					</li>
+					<li ng-hide="user"><a ui-sref="cloud.signup"><font color="FF2266">SignUp</font></a></li>
+					<li ng-hide="user"><a ui-sref="cloud.login"><font color="FF2277">Login</font></a></li>
+							
 					<li class="dropdown" ng-show="user">
 						<a href="" class="dropdown-toggle" data-toggle="dropdown">{{user.userName}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -43,8 +40,8 @@
 
 	<div class="container ng-hide" ng-show="initialized">
 		<div class="alert alert-danger" ng-show="error">{{error}}</div>
-		<div ng-view></div>
+		<div ui-view></div>
 	</div>
 
-	<div ui-view></div>
+
 	
