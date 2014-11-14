@@ -65,7 +65,7 @@ angular
 
 						} ]
 
-		).run(function($rootScope, $location, $cookieStore, AuthService) {
+		).run(function($rootScope, $location, $cookieStore, AuthService, UserService) {
 
 			/* Reset error when a new view is loaded */
 			$rootScope.$on('$viewContentLoaded', function() {
@@ -105,7 +105,7 @@ angular
 			var authToken = $cookieStore.get('authToken');
 			if (authToken !== undefined) {
 				$rootScope.authToken = authToken;
-				AuthService.get(function(user) {
+				UserService.get(function(user) {
 					$rootScope.user = user;
 					$location.path(originalPath);
 				});
