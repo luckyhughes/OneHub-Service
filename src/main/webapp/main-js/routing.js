@@ -27,6 +27,10 @@ mainApp.config(function($stateProvider, $urlRouterProvider) {
 		url : "/signup",
 		templateUrl : "cloud-partials/signup.html",
 		controller : CreateUserController
+	}).state('cloud.accountsuccess', {
+		url : "/accountsuccess",
+		templateUrl : "cloud-partials/accountcreate.html",
+		controller : CreateUserController
 	}).state('cloud.create', {
 		url : "/create",
 		templateUrl : "cloud-partials/create.html",

@@ -1,99 +1,121 @@
-angular.module('cloudApp', ['ngCookies', 'cloudApp.services'])
-	.config(
-		[ '$locationProvider', '$httpProvider', function($locationProvider, $httpProvider) {
-			
-			/* Register error provider that shows message on failed requests or redirects to login page on
-			 * unauthenticated requests */
-		    $httpProvider.interceptors.push(function ($q, $rootScope, $location) {
-			        return {
-			        	'responseError': function(rejection) {
-			        		var status = rejection.status;
-			        		var config = rejection.config;
-			        		var method = config.method;
-			        		var url = config.url;
-			        		
-			        		if (status == 401) {
-			        			$location.path( "cloud/login" );
-			        		} else {
-			        			$rootScope.error = method + " on " + url + " failed with status " + status;
-			        		}
-			              
-			        		return $q.reject(rejection);
-			        	}
-			        };
-			    }
-		    );
-		    
-		    /* Registers auth token interceptor, auth token is either passed by header or by query parameter
-		     * as soon as there is an authenticated user */
-		    $httpProvider.interceptors.push(function ($q, $rootScope, $location) {
-		        return {
-		        	'request': function(config) {
-		        		var isRestCall = config.url.indexOf('rest') == 0;
-		        		if (isRestCall && angular.isDefined($rootScope.authToken)) {
-		        			var authToken = $rootScope.authToken;
-		        			if (cloudAppConfig.useAuthTokenHeader) {
-		        				config.headers['X-Auth-Token'] = authToken;
-		        			} else {
-		        				config.url = config.url + "?token=" + authToken;
-		        			}
-		        		}
-		        		return config || $q.when(config);
-		        	}
-		        };
-		    }
-	    );
-		   
-		} ]
-		
-	).run(function($rootScope, $location, $cookieStore, AuthService) {
-		
-		/* Reset error when a new view is loaded */
-		$rootScope.$on('$viewContentLoaded', function() {
-			delete $rootScope.error;
-		});
-		
-		$rootScope.hasRole = function(role) {
-			
-			if ($rootScope.user === undefined) {
-				return false;
-			}
-			
-			if ($rootScope.user.roles[role] === undefined) {
-				return false;
-			}
-			
-			return $rootScope.user.roles[role];
-		};
-		
-		$rootScope.logout = function() {
-			delete $rootScope.user;
-			delete $rootScope.authToken;
-			$cookieStore.remove('authToken');
-			$location.path("cloud/login");
-		};
-		
-		 /* Try getting valid user from cookie or go to login page */
-		var originalPath = $location.path();
-		console.log(originalPath);
-		if($location.path().indexOf("signup")==0){
-		$location.path("cloud/login");
-		}
-		var authToken = $cookieStore.get('authToken');
-		if (authToken !== undefined) {
-			$rootScope.authToken = authToken;
-			AuthService.get(function(user) {
-				$rootScope.user = user;
-				$location.path(originalPath);
-			});
-		}
-		
-		$rootScope.initialized = true;
-	});
+angular
+		.module('cloudApp', [ 'ngCookies', 'cloudApp.services' ])
+		.config(
+				[
+						'$locationProvider',
+						'$httpProvider',
+						function($locationProvider, $httpProvider) {
 
+							/*
+							 * Register error provider that shows message on
+							 * failed requests or redirects to login page on
+							 * unauthenticated requests
+							 */
+							$httpProvider.interceptors.push(function($q,
+									$rootScope, $location) {
+								return {
+									'responseError' : function(rejection) {
+										var status = rejection.status;
+										var config = rejection.config;
+										var method = config.method;
+										var url = config.url;
+
+										if (status == 401) {
+											$location.path("cloud/login");
+										} else {
+											$rootScope.error = method + " on "
+													+ url
+													+ " failed with status "
+													+ status;
+										}
+
+										return $q.reject(rejection);
+									}
+								};
+							});
+
+							/*
+							 * Registers auth token interceptor, auth token is
+							 * either passed by header or by query parameter as
+							 * soon as there is an authenticated user
+							 */
+							$httpProvider.interceptors
+									.push(function($q, $rootScope, $location) {
+										return {
+											'request' : function(config) {
+												var isRestCall = config.url
+														.indexOf('rest') == 0;
+												if (isRestCall
+														&& angular
+																.isDefined($rootScope.authToken)) {
+													var authToken = $rootScope.authToken;
+													if (cloudAppConfig.useAuthTokenHeader) {
+														config.headers['X-Auth-Token'] = authToken;
+													} else {
+														config.url = config.url
+																+ "?token="
+																+ authToken;
+													}
+												}
+												return config
+														|| $q.when(config);
+											}
+										};
+									});
+
+						} ]
+
+		).run(function($rootScope, $location, $cookieStore, AuthService) {
+
+			/* Reset error when a new view is loaded */
+			$rootScope.$on('$viewContentLoaded', function() {
+				delete $rootScope.error;
+			});
+
+			$rootScope.hasRole = function(role) {
+
+				if ($rootScope.user === undefined) {
+					return false;
+				}
+
+				if ($rootScope.user.roles[role] === undefined) {
+					return false;
+				}
+
+				return $rootScope.user.roles[role];
+			};
+
+			$rootScope.logout = function() {
+				delete $rootScope.user;
+				delete $rootScope.authToken;
+				$cookieStore.remove('authToken');
+				$location.path("cloud/login");
+			};
+
+			/* Try getting valid user from cookie or go to login page */
+			var originalPath = $location.path();
+			console.log(originalPath);
+			if ($location.path().indexOf("signup") == 0) {
+				$location.path("cloud/login");
+			}
+
+			if ($location.path().indexOf("accountsuccess") == 0) {
+				$location.path("cloud/login");
+			}
+			var authToken = $cookieStore.get('authToken');
+			if (authToken !== undefined) {
+				$rootScope.authToken = authToken;
+				AuthService.get(function(user) {
+					$rootScope.user = user;
+					$location.path(originalPath);
+				});
+			}
+
+			$rootScope.initialized = true;
+		});
 
 function IndexController($scope, NewsService) {
-	
+
 	$scope.newsEntries = NewsService.query();
 
 	$scope.deleteEntry = function(newsEntry) {
@@ -103,11 +125,12 @@ function IndexController($scope, NewsService) {
 	};
 };
 
-
 function EditController($scope, $routeParams, $location, NewsService) {
 
-	$scope.newsEntry = NewsService.get({id: $routeParams.id});
-	
+	$scope.newsEntry = NewsService.get({
+		id : $routeParams.id
+	});
+
 	$scope.save = function() {
 		$scope.newsEntry.$save(function() {
 			$location.path('cloud/myaccount');
@@ -115,11 +138,10 @@ function EditController($scope, $routeParams, $location, NewsService) {
 	};
 };
 
-
 function CreateController($scope, $location, NewsService) {
-	
+
 	$scope.newsEntry = new NewsService();
-	
+
 	$scope.save = function() {
 		$scope.newsEntry.$save(function() {
 			$location.path('cloud/myaccount');
@@ -128,25 +150,28 @@ function CreateController($scope, $location, NewsService) {
 };
 
 function CreateUserController($scope, $location, UserService) {
-	
+
 	$scope.user = new UserService();
-	
+
 	$scope.signup = function() {
 		$scope.user.$save(function() {
-			$location.path('cloud/login');
+			$location.path('cloud/accountsuccess');
 		});
 	};
 };
 
+function LoginController($scope, $rootScope, $location, $cookieStore,
+		AuthService, UserService) {
 
-function LoginController($scope, $rootScope, $location, $cookieStore, AuthService, UserService) {
-	
 	$scope.rememberMe = false;
 
 	$scope.auth = new AuthService();
-	
+
 	$scope.login = function() {
-		AuthService.authenticate($.param({username: $scope.username, password: $scope.password}), function(authenticationResult) {
+		AuthService.authenticate($.param({
+			username : $scope.username,
+			password : $scope.password
+		}), function(authenticationResult) {
 			var authToken = authenticationResult.token;
 			$rootScope.authToken = authToken;
 			if ($scope.rememberMe) {
@@ -160,29 +185,34 @@ function LoginController($scope, $rootScope, $location, $cookieStore, AuthServic
 	};
 };
 
-
-var services = angular.module('cloudApp.services', ['ngResource']);
+var services = angular.module('cloudApp.services', [ 'ngResource' ]);
 
 services.factory('AuthService', function($resource) {
-	
-	return $resource('rest/auth/:action', {},
-			{
-				authenticate: {
-					method: 'POST',
-					params: {'action' : 'authenticate'},
-					headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-				},
+
+	return $resource('rest/auth/:action', {}, {
+		authenticate : {
+			method : 'POST',
+			params : {
+				'action' : 'authenticate'
+			},
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
 			}
-		);
+		},
+	});
 });
 
 services.factory('UserService', function($resource) {
-	
-	return $resource('rest/user/:id', {id: '@id'});
-			
+
+	return $resource('rest/user/:id', {
+		id : '@id'
+	});
+
 });
 
 services.factory('NewsService', function($resource) {
-	
-	return $resource('rest/news/:id', {id: '@id'});
+
+	return $resource('rest/news/:id', {
+		id : '@id'
+	});
 });
