@@ -25,3 +25,8 @@ ng-hide {
   content:"*";
   color:red;
 }
+.form-validation{
+	color:red;
+	font-size:12px;
+	float:right;
+}

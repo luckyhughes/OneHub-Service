@@ -148,15 +148,79 @@ function CreateController($scope, $location, NewsService) {
 		});
 	};
 };
-
+function CleanValidation($scope)
+{
+	 $scope.requireName=false;
+	 $scope.requireLast=false;
+	 $scope.requireCompany=false;
+	 $scope.requirePhone=false;
+	 $scope.requireEmail=false;
+	 $scope.requireUsername=false;
+	 $scope.requirePassword=false;
+	 $scope.requireRetypepwd=false;
+}
+function CheckValidity($scope)
+{
+	 CleanValidation($scope);
+	 
+	if($scope.user.firstName==undefined)
+	{
+	   $scope.requireName=true;
+	}
+    if($scope.user.lastName==undefined)
+    {
+       $scope.requireLast=true;
+    }
+    if($scope.user.tenantId==undefined)
+    {
+       $scope.requireCompany=true;
+    }
+    if($scope.user.phone==undefined)
+    {
+       $scope.requirePhone=true;
+    }
+    if($scope.user.email==undefined)
+    {
+    	$scope.errorEmail=true;
+    }
+   // else
+    //{
+    //	passRegEx = /^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*([a-zA-Z0-9-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/;
+	//	alert( passRegEx.test($scope.user.email));
+    //}
+    if($scope.user.username==undefined)
+    {
+       $scope.requireUsername=true;
+    }
+    if($scope.user.password==undefined)
+    {
+       $scope.requirePassword=true;
+    }
+    if($scope.retry==undefined)
+    {
+       $scope.requireRetypepwd=true;
+    }
+    if($scope.user.password!==$scope.retry&&$scope.user.password!==undefined)
+    {
+    	 $scope.requireRetypepwd=false;
+    	 $scope.errorRetypepwd=true;
+    }
+    return false;
+}
 function CreateUserController($scope, $location, UserService) {
 
 	$scope.user = new UserService();
 
 	$scope.signup = function() {
+
+	var isValidate=	CheckValidity(this);
+	
+	 if(isValidate)
+		 {
 		$scope.user.$save(function() {
 			$location.path('cloud/accountsuccess');
-		});
+		   });
+		 }
 	};
 };
 
