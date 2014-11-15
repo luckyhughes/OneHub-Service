@@ -155,33 +155,41 @@ function CleanValidation($scope)
 	 $scope.requireCompany=false;
 	 $scope.requirePhone=false;
 	 $scope.requireEmail=false;
+	 $scope.errorEmail=false;
 	 $scope.requireUsername=false;
 	 $scope.requirePassword=false;
+	 $scope.errorPassword=false;
+	 $scope.errorRetypepwd=false;
 	 $scope.requireRetypepwd=false;
 }
 function CheckValidity($scope)
 {
 	 CleanValidation($scope);
-	 
+	 var allSet=true;
 	if($scope.user.firstName==undefined)
 	{
 	   $scope.requireName=true;
+	   allSet=false;
 	}
     if($scope.user.lastName==undefined)
     {
        $scope.requireLast=true;
+       allSet=false;
     }
     if($scope.user.tenantId==undefined)
     {
        $scope.requireCompany=true;
+       allSet=false;
     }
     if($scope.user.phone==undefined)
     {
        $scope.requirePhone=true;
+       allSet=false;
     }
     if($scope.user.email==undefined)
     {
     	$scope.errorEmail=true;
+    	allSet=false;
     }
    // else
     //{
@@ -191,21 +199,33 @@ function CheckValidity($scope)
     if($scope.user.username==undefined)
     {
        $scope.requireUsername=true;
+       allSet=false;
     }
     if($scope.user.password==undefined)
     {
        $scope.requirePassword=true;
+       allSet=false;
     }
+    else
+    	{
+    	if($scope.user.password.length<6)
+    		{
+    		$scope.errorPassword=true;
+    		allSet=false;
+    		}
+    	}
     if($scope.retry==undefined)
     {
        $scope.requireRetypepwd=true;
+       allSet=false;
     }
     if($scope.user.password!==$scope.retry&&$scope.user.password!==undefined)
     {
     	 $scope.requireRetypepwd=false;
     	 $scope.errorRetypepwd=true;
+    	 allSet=false;
     }
-    return false;
+    return allSet;
 }
 function CreateUserController($scope, $location, UserService) {
 
