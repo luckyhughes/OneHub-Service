@@ -9,13 +9,21 @@
 			<div class="form-group">
 				<label for="username" class="col-sm-3 control-label">User Name:</label>
 				<div class="col-sm-9">
-					<input id="username" ng-model="username" type="text" class="form-control" />
+					<input id="username" ng-model="username" type="text" class="form-control"/>
+					
+					<div class="form-validation" ng-show="requireUsername">
+						           Please enter your username.
+					 </div>
+					 
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="password" class="col-sm-3 control-label">Password:</label>
 				<div class="col-sm-9">
-					<input id="password" ng-model="password" type="password" class="form-control" />
+					<input id="password" ng-model="password" type="password" class="form-control"/>
+					<div class="form-validation" ng-show="requirePassword">
+						       Please enter your password.
+						  </div>
 				</div>
 			</div>
 			<div class="form-group">

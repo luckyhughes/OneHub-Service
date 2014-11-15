@@ -148,7 +148,7 @@ function CreateController($scope, $location, NewsService) {
 		});
 	};
 };
-function CleanValidation($scope)
+function CleanSignupValidation($scope)
 {
 	 $scope.requireName=false;
 	 $scope.requireLast=false;
@@ -162,9 +162,9 @@ function CleanValidation($scope)
 	 $scope.errorRetypepwd=false;
 	 $scope.requireRetypepwd=false;
 }
-function CheckValidity($scope)
+function CheckSignupValidity($scope)
 {
-	 CleanValidation($scope);
+	CleanSignupValidation($scope);
 	 var allSet=true;
 	if($scope.user.firstName==undefined)
 	{
@@ -227,13 +227,40 @@ function CheckValidity($scope)
     }
     return allSet;
 }
+
+function CleanLoginValidation($scope)
+{
+	 
+	 $scope.requireUsername=false;
+	 $scope.requirePassword=false;
+
+}
+function CheckLoginValidity($scope)
+{
+	CleanLoginValidation($scope);
+	
+	var allSet=true;
+	
+    if($scope.username==undefined)
+    {
+       $scope.requireUsername=true;
+       allSet=false;
+    }
+    if($scope.password==undefined)
+    {
+       $scope.requirePassword=true;
+       allSet=false;
+    }
+
+    return allSet;
+}
 function CreateUserController($scope, $location, UserService) {
 
 	$scope.user = new UserService();
 
 	$scope.signup = function() {
 
-	var isValidate=	CheckValidity(this);
+	var isValidate=	CheckSignupValidity(this);
 	
 	 if(isValidate)
 		 {
@@ -252,20 +279,26 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 	$scope.auth = new AuthService();
 
 	$scope.login = function() {
-		AuthService.authenticate($.param({
-			username : $scope.username,
-			password : $scope.password
-		}), function(authenticationResult) {
-			var authToken = authenticationResult.token;
-			$rootScope.authToken = authToken;
-			if ($scope.rememberMe) {
-				$cookieStore.put('authToken', authToken);
-			}
-			UserService.get(function(user) {
-				$rootScope.user = user;
-				$location.path('cloud/myaccount');
+		
+		var isValidate=	CheckLoginValidity(this);
+		
+		if(isValidate)
+		 {
+			AuthService.authenticate($.param({
+				username : $scope.username,
+				password : $scope.password
+			}), function(authenticationResult) {
+				var authToken = authenticationResult.token;
+				$rootScope.authToken = authToken;
+				if ($scope.rememberMe) {
+					$cookieStore.put('authToken', authToken);
+				}
+				UserService.get(function(user) {
+					$rootScope.user = user;
+					$location.path('cloud/myaccount');
+				});
 			});
-		});
+	  }
 	};
 };
 
