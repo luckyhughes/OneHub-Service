@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,11 +78,13 @@ public class UserResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public User create(User user)
+	public Response create(User user)
 	{
 		this.logger.info("create(): " + user);
 
-		return this.userService.save(user);
+		userService.save(user);
+		
+		return Response.noContent().build();
 	}
 
 	private Map<String, Boolean> createRoleMap(UserDetails userDetails) {
