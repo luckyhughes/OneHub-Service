@@ -59,6 +59,8 @@ angular
 												}
 												return config
 														|| $q.when(config);
+												
+												
 											}
 										};
 									});
@@ -240,13 +242,13 @@ function CheckLoginValidity($scope)
 	CleanLoginValidation($scope);
 	
 	var allSet=true;
-	
-    if($scope.username==undefined)
+
+    if($scope.username==undefined||$scope.username=="")
     {
        $scope.requireUsername=true;
        allSet=false;
     }
-    if($scope.password==undefined)
+    if($scope.password==undefined||$scope.password=="")
     {
        $scope.requirePassword=true;
        allSet=false;
@@ -281,23 +283,30 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 	$scope.login = function() {
 		
 		var isValidate=	CheckLoginValidity(this);
-		
+		$scope.errorLogin=false;
+		var notLogin=true;
 		if(isValidate)
 		 {
+			
 			AuthService.authenticate($.param({
 				username : $scope.username,
 				password : $scope.password
 			}), function(authenticationResult) {
+				isLogin=false;
 				var authToken = authenticationResult.token;
 				$rootScope.authToken = authToken;
 				if ($scope.rememberMe) {
 					$cookieStore.put('authToken', authToken);
 				}
 				UserService.get(function(user) {
+				
 					$rootScope.user = user;
 					$location.path('cloud/myaccount');
 				});
 			});
+		 
+			 $scope.errorLogin=notLogin;
+			 
 	  }
 	};
 };
