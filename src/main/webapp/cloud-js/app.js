@@ -273,7 +273,7 @@ function CreateUserController($scope, $location, UserService) {
 	};
 };
 
-function LoginController($scope, $rootScope, $location, $cookieStore,
+function LoginController($scope, $rootScope, $location, $cookieStore, $q,
 		AuthService, UserService) {
 
 	$scope.rememberMe = false;
@@ -283,8 +283,9 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 	$scope.login = function() {
 		
 		var isValidate=	CheckLoginValidity(this);
-		$scope.errorLogin=false;
-		var notLogin=true;
+		
+		$scope.errorLogin = true;
+		
 		if(isValidate)
 		 {
 			
@@ -293,7 +294,15 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 				password : $scope.password
 			}), function(authenticationResult) {
 				isLogin=false;
+				
 				var authToken = authenticationResult.token;
+				
+				if (authToken != null) {
+
+					$scope.errorLogin = false;
+
+				}
+				
 				$rootScope.authToken = authToken;
 				if ($scope.rememberMe) {
 					$cookieStore.put('authToken', authToken);
@@ -304,8 +313,6 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 					$location.path('cloud/myaccount');
 				});
 			});
-		 
-			 $scope.errorLogin=notLogin;
 			 
 	  }
 	};
