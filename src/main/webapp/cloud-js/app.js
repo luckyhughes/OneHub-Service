@@ -284,36 +284,40 @@ function LoginController($scope, $rootScope, $location, $cookieStore, $q,
 		
 		var isValidate=	CheckLoginValidity(this);
 		
-		$scope.errorLogin = true;
-		
+		$scope.errorLogin = false;
+	
 		if(isValidate)
 		 {
-			
-			AuthService.authenticate($.param({
-				username : $scope.username,
-				password : $scope.password
-			}), function(authenticationResult) {
-				isLogin=false;
+	
+					AuthService.authenticate($.param({
+						username : $scope.username,
+						password : $scope.password
+					}), function(authenticationResult) {
+						
+						var authToken = authenticationResult.token;
+						
+						if (authToken != null) {
+							$scope.errorLogin = false;
+						}
+						
+						$rootScope.authToken = authToken;
+						if ($scope.rememberMe) {
+							$cookieStore.put('authToken', authToken);
+						}
+						UserService.get(function(user) {
+						
+							$rootScope.user = user;
+							$location.path('cloud/myaccount');
+							return q.promise
+						});
+					},
+					
+					function(error){
+						
+						$scope.errorLogin = true;
 				
-				var authToken = authenticationResult.token;
-				
-				if (authToken != null) {
-
-					$scope.errorLogin = false;
-
-				}
-				
-				$rootScope.authToken = authToken;
-				if ($scope.rememberMe) {
-					$cookieStore.put('authToken', authToken);
-				}
-				UserService.get(function(user) {
-				
-					$rootScope.user = user;
-					$location.path('cloud/myaccount');
-				});
-			});
-			 
+					});
+				   		
 	  }
 	};
 };
