@@ -288,11 +288,13 @@ function LoginController($scope, $rootScope, $location, $cookieStore, $q,
 	
 		if(isValidate)
 		 {
-	
-					AuthService.authenticate($.param({
+					var authResponse = AuthService.authenticate($.param({
 						username : $scope.username,
 						password : $scope.password
-					}), function(authenticationResult) {
+					}));
+					
+					authResponse.$promise
+					.then(function(authenticationResult){
 						
 						var authToken = authenticationResult.token;
 						
@@ -308,16 +310,18 @@ function LoginController($scope, $rootScope, $location, $cookieStore, $q,
 						
 							$rootScope.user = user;
 							$location.path('cloud/myaccount');
-							return q.promise
 						});
-					},
-					
-					function(error){
 						
+					 })
+					.catch(function(err){
+						
+						console.log(err.status);
+						
+						if(err.status=="401"){
+ 
 						$scope.errorLogin = true;
-				
-					});
-				   		
+						}
+					});			   		
 	  }
 	};
 };
