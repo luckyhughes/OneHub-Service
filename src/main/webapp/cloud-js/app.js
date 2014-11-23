@@ -1,5 +1,5 @@
 angular
-		.module('cloudApp', [ 'ngCookies', 'cloudApp.services' ])
+		.module('cloudApp', [ 'ngCookies', 'cloudApp.services', 'charts', 'charts.controllers' ])
 		.config(
 				[
 						'$locationProvider',
