@@ -49,16 +49,16 @@ function chartController($scope,$http)
 			_.pluck(highchartJson, 'sequence_number');
 
 		    sortedJson = _.sortBy(highchartJson, 'name');
-		    $scope.basicAreaChart = sortedJson;	
+		    $scope.jsonData = sortedJson;	
 		    console.log($scope.basicAreaChart);
 			}
 			
 		});
 		
 		promise.fail(function() {
-  			$scope.basicAreaChart = {status:error};
+  			$scope.jsonData = {status:error_nodata};
 		});
-		},1000);
+		},5000);
 
 		
  }
