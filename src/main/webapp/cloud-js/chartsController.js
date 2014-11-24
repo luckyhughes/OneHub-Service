@@ -1,25 +1,28 @@
 angular.module('charts.controllers',[])
 
-.controller('chartController', ['$scope','$http', 
-	function($scope,$http) {
-	    $scope.chartObj; // this will contain a reference to the highcharts' chart object
- 		
-    		data = getJsonData("select responseTime from AggregateMetrics where time > now() - 1000h limit 20");
-    		
-    		console.log(data);
-		
-}]);
+.controller('chartController', chartController);
 
-function getJsonData(query)
+function chartController($scope,$http)
  {
+	 $scope.chartObj; 
+	 
+	 var query = "select responseTime from AggregateMetrics where time > now() - 1000h limit 20";
 	 var url = "http://ec2-54-68-149-90.us-west-2.compute.amazonaws.com:8086/db/performance/series?u=root&p=root&q="+ query;
 
-	 var highchartJson =[];
+	 var highchartJson;
 	 var sortedJson;
 
-		console.log("ulr is:" + url);
+		console.log("url is:" + url);
 
-		$.getJSON(url, function(jsondata) {
+		setInterval(function() {
+		
+		highchartJson =[];
+		var promise = $.getJSON(url);
+		
+		
+		promise.done(function(jsondata) {
+		
+		console.log(jsondata);
 
 			if(jsondata.length>0){
 
@@ -42,15 +45,20 @@ function getJsonData(query)
 					
 					highchartJson.push(seriesToPlot);
 				}
-			}	
+				
+			_.pluck(highchartJson, 'sequence_number');
 
+		    sortedJson = _.sortBy(highchartJson, 'name');
+		    $scope.basicAreaChart = sortedJson;	
+		    console.log($scope.basicAreaChart);
+			}
+			
 		});
 		
-		console.log("ulr is:" + url);
+		promise.fail(function() {
+  			$scope.basicAreaChart = {status:error};
+		});
+		},1000);
 
-		_.pluck(highchartJson, 'sequence_number');
-
-		sortedJson = _.sortBy(highchartJson, 'name');
-		console.log(sortedJson);
-		return sortedJson;
+		
  }
