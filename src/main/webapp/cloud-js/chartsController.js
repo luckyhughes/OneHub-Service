@@ -49,8 +49,8 @@ function chartController($scope,$http)
 			_.pluck(highchartJson, 'sequence_number');
 
 		    sortedJson = _.sortBy(highchartJson, 'name');
-		    $scope.jsonData = sortedJson;	
-		    console.log($scope.jsonData);
+		    $scope.basicAreaChart = sortedJson;	
+		    console.log($scope.basicAreaChart);
 			}
 			
 		});

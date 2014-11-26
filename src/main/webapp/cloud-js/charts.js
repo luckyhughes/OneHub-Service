@@ -12,10 +12,17 @@ angular.module('charts', []).directive('chart', function() {
 
             //Update when charts data changes
             $scope.$watch('chartData', function(value) {
-                if (!value)
-                    return;
+            	console.log(value)
+                if (value!=undefined)
+                	{
+                	allok();
+                	return
+                	}
+                else
+                	{
 
                 // use default values if nothing is specified in the given settings
+            	$scope.chartData={};
                 $scope.chartData.chart={};
                 $scope.chartData.title={};
                 $scope.chartData.xAxis={};
@@ -31,13 +38,12 @@ angular.module('charts', []).directive('chart', function() {
                 if ($attrs.height)
                     $scope.chartData.chart.height = $scope.chartData.chart.height || $attrs.height;
                 if ($attrs.width)
-                    $scope.chartData.chart.width = $scope.chartData.chart.type || $attrs.width;
+                    $scope.chartData.chart.width = $scope.chartData.chart.width || $attrs.width;
                 
                 $scope.chartData.title.text='Performance Heath';
              
                 $scope.chartData.xAxis.categories=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                                                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                
                 
                 $scope.chartData.yAxis.title={};
                 $scope.chartData.yAxis.text='Temperature (°C)';
@@ -59,12 +65,18 @@ angular.module('charts', []).directive('chart', function() {
                     name: 'London',
                     data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
                 }];
-                
-                
+                console.log($scope.chartData);
                 $scope.chartObj = new Highcharts.Chart($scope.chartData);
+                console.log( $scope.chartObj);
+             }
             });
         }
     };
 
 });
 
+
+function allok()
+{
+	alert("ok");
+	}
