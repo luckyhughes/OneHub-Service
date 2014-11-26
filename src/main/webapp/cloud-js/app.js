@@ -292,7 +292,7 @@ function LoginController($scope, $rootScope, $location, $cookieStore, $q,
 						username : $scope.username,
 						password : $scope.password
 					}));
-					
+					console.log(authResponse);
 					authResponse.$promise
 					.then(function(authenticationResult){
 						

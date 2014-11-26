@@ -50,7 +50,7 @@ function chartController($scope,$http)
 
 		    sortedJson = _.sortBy(highchartJson, 'name');
 		    $scope.jsonData = sortedJson;	
-		    console.log($scope.basicAreaChart);
+		    console.log($scope.jsonData);
 			}
 			
 		});
