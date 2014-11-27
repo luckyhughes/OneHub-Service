@@ -46,8 +46,8 @@ angular.module('charts', []).directive('chart', function() {
                                                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 
                 $scope.chartData.yAxis.title={};
-                $scope.chartData.yAxis.text='Temperature (°C)';
-                $scope.chartData.tooltip.valueSuffix='°C';
+                $scope.chartData.yAxis.text='Temperature (C)';
+                $scope.chartData.tooltip.valueSuffix='C';
                 $scope.chartData.legend.layout='vertical';
                 $scope.chartData.legend.align='right';
                 $scope.chartData.legend.verticalAlign='middle';
