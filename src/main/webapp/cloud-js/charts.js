@@ -3,7 +3,7 @@ angular.module('charts', []).directive('chart', function() {
         restrict: 'E',
         template: '<div>hello</div>',
         scope: {
-            chartData: "=value",
+            chartValue: "=value",
             chartObj: "=?"
         },
         transclude: true,
@@ -13,13 +13,13 @@ angular.module('charts', []).directive('chart', function() {
             //Update when charts data changes
             $scope.$watch('chartData', function(value) {
             	console.log(value)
-                if (value!=undefined)
-                	{
-                	allok();
-                	return
-                	}
-                else
-                	{
+//                if (value!=undefined)
+//                	{
+//                	allok();
+//                	return
+//                	}
+//                else
+//                	{
 
                 // use default values if nothing is specified in the given settings
             	$scope.chartData={};
@@ -52,23 +52,13 @@ angular.module('charts', []).directive('chart', function() {
                 $scope.chartData.legend.align='right';
                 $scope.chartData.legend.verticalAlign='middle';
                 $scope.chartData.legend.borderWidth=0;
-                $scope.chartData.series=[{
-                    name: 'Tokyo',
-                    data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-                }, {
-                    name: 'New York',
-                    data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-                }, {
-                    name: 'Berlin',
-                    data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-                }, {
-                    name: 'London',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }];
-                console.log($scope.chartData);
+              
+                $scope.chartData.series=$scope.chartValue.value;
+                console.log( $scope.chartData.series);
+                if($scope.chartData.series!=undefined)
                 $scope.chartObj = new Highcharts.Chart($scope.chartData);
                 console.log( $scope.chartObj);
-             }
+//             }
             });
         }
     };
