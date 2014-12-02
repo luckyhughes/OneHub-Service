@@ -11,16 +11,13 @@ angular.module('charts', []).directive('chart', function() {
         link: function($scope, $element, $attrs) {
 
             //Update when charts data changes
-            $scope.$watch('chartData', function(value) {
-            	console.log(value)
-//                if (value!=undefined)
-//                	{
-//                	allok();
-//                	return
-//                	}
-//                else
-//                	{
+            $scope.$watch('chartValue', function(value) {
 
+            	var activate=0;
+            	console.log(value)
+            var s=	allok();
+            	console.log(s);
+            
                 // use default values if nothing is specified in the given settings
             	$scope.chartData={};
                 $scope.chartData.chart={};
@@ -52,21 +49,131 @@ angular.module('charts', []).directive('chart', function() {
                 $scope.chartData.legend.align='right';
                 $scope.chartData.legend.verticalAlign='middle';
                 $scope.chartData.legend.borderWidth=0;
-              
-                $scope.chartData.series=$scope.chartValue.value;
-                console.log( $scope.chartData.series);
-                if($scope.chartData.series!=undefined)
+             
+                $scope.chartData.series=s;
+                console.log( $scope.chartData.series.length);
+                if($scope.chartData.series.length!=0)
+                	{
                 $scope.chartObj = new Highcharts.Chart($scope.chartData);
-                console.log( $scope.chartObj);
-//             }
+                 console.log( $scope.chartObj);
+                 activate=1;
+                	 }
+//                }
+            	
+                counter=0;
+                setInterval(function(){
+                	  var s=	allok();
+                  	if(activate==0)
+                  		{
+                  	    $scope.chartData.series=s;
+                  	   $scope.chartObj = new Highcharts.Chart($scope.chartData);
+                       activate=1;
+                  		}
+                  	else
+                  		{
+                  	
+//                 		 var xseries=$scope.chartObj.xAxis.categories;
+                 	//	console.log(xseries);
+                 		 	                      var yseries =$scope.chartObj.series;
+//	                      console.log($scope.chartData.series);
+						  
+                         timeSeries=parseEpochTime(s[2].data);
+   				         console.log($scope.chartData.series);
+					      //logic to update xaxis timeseries data on chart every minute considering interval is 5 sec (5*12)
+						  counter++;
+//                         if(counter%12==0)
+//							xseries.push(timeSeries[0]);
+//						  else
+//						xseries.push("");
+//						
+//						  //append series data with data points for respective series
+						  for ( i=0; i<s.length; i++) {
+//						
+                               datapoints =  s[i].data[0];
+//
+//								//shift y series if dataponits are more than a value (20)
+//                           	shift = yseries[i].data.length > 20;
+//
+
+                               yseries[i].addPoint(datapoints, true, true);
+                   	  }	
+                  		}
+                	},1000);
             });
         }
     };
 
 });
 
+function parseEpochTime(epoch)
+{
+	   var time=[];
+	   var offset = (new Date).getTimezoneOffset()*60000;
+
+		for(var i=0;i<epoch.length;i++)
+		{
+	      var date=new Date(epoch[i] - offset); //get offset for local timezone and convert epoch time to localtime zone
+
+	      time.push(date.getHours()+":"+date.getMinutes()+":"+date.getSeconds());
+	  	}
+	return time;
+}
+
 
 function allok()
 {
-	alert("ok");
-	}
+	$.ajaxSetup( { "async": false } );
+	 var query = "select responseTime from AggregateMetrics where time > now() - 3000h limit 20";
+	 var url = "http://ec2-54-68-149-90.us-west-2.compute.amazonaws.com:8086/db/performance/series?u=root&p=root&q="+ query;
+
+	 var highchartJson;
+	 var sortedJson;
+
+		console.log("url is:" + url);
+
+		highchartJson =[];
+		var promise = $.getJSON(url);
+		
+		console.log(promise);
+		promise.done(function(jsondata) {
+			
+			console.log(jsondata);
+
+				if(jsondata.length>0){
+
+					for (var i = 0; i < jsondata[0].columns.length; i++) {
+
+							if(jsondata[0].columns[i].localeCompare('sequence_number') == 0 || jsondata[0].columns[i].localeCompare('time') == 0)
+								flag=false;
+							else
+								flag=true;
+						
+							var seriesToPlot = {
+							name : jsondata[0].columns[i],
+							data : [],
+							visible: flag,
+							showInLegend: flag
+						};
+						for (var j = 0; j < jsondata[0].points.length; j++) {
+							seriesToPlot.data.push(jsondata[0].points[j][i]);
+						}
+						
+						highchartJson.push(seriesToPlot);
+					}
+					
+				_.pluck(highchartJson, 'sequence_number');
+
+			    sortedJson = _.sortBy(highchartJson, 'name');
+			  
+//			    console.log($scope.basicAreaChart.value);
+//			    $scope.basicAreaChart.value = sortedJson;	
+//			    console.log($scope.basicAreaChart.value);
+//			
+				}
+				
+			});
+			promise.fail(function() {
+	  			$scope.jsonData = {status:error_nodata};
+			});
+   return  sortedJson;
+}

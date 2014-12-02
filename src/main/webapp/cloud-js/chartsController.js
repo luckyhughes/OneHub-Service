@@ -16,7 +16,7 @@ function chartController($scope,$http)
 //         name: 'Berlin',
 //         data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
 //     }];
-	 var query = "select responseTime from AggregateMetrics where time > now() - 1000h limit 20";
+	 var query = "select responseTime from AggregateMetrics where time > now() - 3000h limit 20";
 	 var url = "http://ec2-54-68-149-90.us-west-2.compute.amazonaws.com:8086/db/performance/series?u=root&p=root&q="+ query;
 
 	 var highchartJson;
@@ -27,10 +27,11 @@ function chartController($scope,$http)
 		highchartJson =[];
 		var promise = $.getJSON(url);
 		
+		console.log(promise);
 		
 		promise.done(function(jsondata) {
 		
-		//console.log(jsondata);
+		console.log(jsondata);
 
 			if(jsondata.length>0){
 
@@ -64,7 +65,6 @@ function chartController($scope,$http)
 			}
 			
 		});
-		
 		promise.fail(function() {
   			$scope.jsonData = {status:error_nodata};
 		});
