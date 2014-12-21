@@ -3,7 +3,7 @@
 	<div class="col-sm-6 col-md-2 sidebar" style="background-color: #999">
 		<ul class="nav nav-sidebar">
 			<li class="active"><a href="#">Overview <span
-					class="sr-only">(current)</span></a></li>
+			class="sr-only">(current)</span></a></li>
 			<li><a href="#">Reports</a></li>
 			<li><a href="#">Analytics</a></li>
 			<li><a href="#">Export</a></li>
@@ -27,7 +27,6 @@
 		<div class="page-header">
 			<h3>Highcharts</h3>
 		</div>
-		
 		<button id="30m" class="btn btn-info btn-xs">30 min</button>
 		<button id="1h" class="btn btn-info btn-xs">1 hour</button>
 		<button id="5h" class="btn btn-info btn-xs">5 Hour</button>
@@ -40,11 +39,20 @@
 <!-- 			style="width: 700px; height: 250px; margin: 0 auto"></div> -->
 <!-- 		<div id="sample_summary" -->
 <!-- 			style="width: 700px; height: 250px; margin: 0 auto"></div> -->
-
-	<div ng-controller="chartController">
-		<chart value='basicAreaChart' type="area" height="400" width="700" chart-obj='chartObj'></chart>
+<!-- 	<div ng-controller="chartController"> -->
+<br>
+		<chart value='basicAreaChart' type="area" height="400" width="500" chart-obj='chartObj'></chart>
 		{{myValue}}
-	</div>
+	
+		<charty value='basicAreaChart' type="area" height="400" width="500" chart-objj='chartObjj'></charty>
+		{{myValue}}
+		
+		<chartyy value='basicAreaChart' type="area" height="400" width="500" chart-objjj='chartObjjj'></chart>
+		{{myValue}}
+	
+	
+<!-- 	</div> -->
+	
 			
 	</div>
 
